@@ -71,6 +71,7 @@ contains "atoi:" "sum.s"
 contains "sum:" "sum.s"
 contains "jal atoi" "sum.s"
 contains "jal sum" "sum.s"
+sum_tests=$tests_passed
 # 2_length
 test_output "spim -q -f length.s hola" "4"
 test_output "spim -q -f length.s Milne" "5"
@@ -87,6 +88,7 @@ test_output "spim -q -f length.s 1234567890" "10"
 contains "main:" "length.s"
 contains "length:" "length.s"
 contains "jal length" "length.s"
+length_tests=$(( $tests_passed - $sum_tests ))
 # 3_palindrome
 test_output "spim -q -f palindrome.s hola" "no es palindromo"
 test_output "spim -q -f palindrome.s aBba" "no es palindromo"
@@ -108,13 +110,19 @@ contains "is_palindrome:" "palindrome.s"
 contains "jal length" "palindrome.s"
 contains "jal is_palindrome" "palindrome.s"
 contains "addi \$sp, \$sp" "palindrome.s"
+palindrome_tests=$(( $tests_passed - $sum_tests - $length_tests ))
 # resultado final
+echo
 echo "--------------  Resultado  --------------"
 if [[ $tests_passed -eq 50 ]]
 then
   echo -e "Todos los tests pasaron ${GREEN}✓${NC}"
 else
-  echo "Resultado: $tests_passed/50 tests OK."
+  echo -e "sum: $sum_tests ${GREEN}✓${NC}"
+  echo -e "length: $length_tests ${GREEN}✓${NC}"
+  echo -e "palindrome: $palindrome_tests ${GREEN}✓${NC}"
+  echo
+  echo "Total: $tests_passed/50 tests OK."
 fi
 
 exit 0
